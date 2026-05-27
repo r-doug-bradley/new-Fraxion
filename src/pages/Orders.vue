@@ -1,12 +1,14 @@
-<script setup lang="ts">
-import { useAuthStore } from '@/stores/auth'
-const auth = useAuthStore()
-</script>
-
 <template>
-  <section class="prose dark:prose-invert max-w-none">
-    <h2>Orders</h2>
-    <p v-if="auth.can('orders:read')">Orders content...</p>
-    <p v-else>You do not have permission to view orders.</p>
-  </section>
+  <TeamsChatEmbed
+    bridge-url="http://localhost:5173/teams-chat-bridge.html"
+    height="720px"
+    @ready="onChatReady"
+    @error="onChatError"
+  />
 </template>
+
+<script setup lang="ts">
+import TeamsChatEmbed from '@/components/TeamsChatEmbed.vue';
+const onChatReady = () => console.log('Chat iframe ready');
+const onChatError = (err: any) => console.error('Chat error', err);
+</script>

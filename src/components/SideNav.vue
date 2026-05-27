@@ -6,15 +6,16 @@
       mode="push"
       :width="effectiveExpanded ? 288 : 80"
       :minimized="false"
-      class="bg-[#383e54] text-white h-full border-r border-gray-200 dark:border-neutral-800 transition-[width] duration-200"
+      class="bg-[#383e54] text-white h-full border-r border-gray-200 dark:border-neutral-800 transition-[width] duration-300 ease-in-out"
       navigation-header="headerTemplate"
       navigation-footer="footerTemplate"
       navigation-content="contentTemplate"
     >
       <template #headerTemplate>
-        <div class="h-14 flex items-center px-4 font-semibold tracking-tight">
-          <span v-if="effectiveExpanded">My App</span>
-          <span v-else class="w-full text-center">MA</span>
+        <div
+          class="h-14 flex items-start px-4 pt-2 font-semibold tracking-tight w-full"
+        >
+          
         </div>
       </template>
 
@@ -88,7 +89,11 @@
               <div
                 v-if="effectiveExpanded"
                 class="grid transition-[grid-template-rows] duration-200 overflow-hidden"
-                :style="openGroups[item.id!] ? 'grid-template-rows:1fr' : 'grid-template-rows:0fr'"
+                :style="
+                  openGroups[item.id!]
+                    ? 'grid-template-rows:1fr'
+                    : 'grid-template-rows:0fr'
+                "
               >
                 <ul class="min-h-0 pl-2">
                   <li v-for="c in item.children" :key="c.to" class="py-0.5">
@@ -117,14 +122,7 @@
       <template #footerTemplate>
         <div
           class="px-3 py-2 border-t border-gray-200 dark:border-neutral-800 flex items-center gap-2"
-        >
-          <button
-            class="k-button k-button-md w-full"
-            @click="$emit('update:expanded', !props.expanded)"
-          >
-            {{ effectiveExpanded ? "Collapse" : "Expand" }}
-          </button>
-        </div>
+        ></div>
       </template>
     </Drawer>
   </div>
@@ -134,6 +132,7 @@
 import { computed, onMounted, onBeforeUnmount, ref } from "vue";
 import { useRoute, useRouter, RouterLink } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import { Bars3Icon } from "@heroicons/vue/24/outline";
 
 // Kendo Drawer + Tooltip
 import { Drawer } from "@progress/kendo-vue-layout";

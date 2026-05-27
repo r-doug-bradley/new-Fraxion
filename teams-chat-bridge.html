@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teams Chat Bridge</title>
+  <script src="https://res.cdn.office.net/teams-js/2.24.0/js/MicrosoftTeams.min.js"></script>
+  <script src="https://statics.teams.cdn.office.net/sdk/v1.12.0/js/MicrosoftTeams.min.js"></script>
+  <style>
+    html,body,#root { margin:0; height:100%; overflow:hidden; }
+    .loading { display:flex; align-items:center; justify-content:center; height:100%; font-family:sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="root" class="loading">Initializing Teams…</div>
+
+  <script>
+    // ---------- 1. Initialise SDK ----------
+    microsoftTeams.app.initialize();
+    microsoftTeams.app.getContext().then(async ctx => {
+      const { channelId, teamId } = ctx.channel || {};
+
+      if (!channelId) {
+        document.getElementById('root').innerHTML = '<p style="color:red">Not inside a channel.</p>';
+        return;
+      }
+
+      // ---------- 2. Render Fluent UI ConversationView ----------
+      const { ConversationView } = await import('https://fluentui.azureedge.net/fluentui-react/v9/components/ConversationView/ConversationView.js');
+      const root = document.getElementById('root');
+      root.innerHTML = '';   // remove loading text
+
+      // The ConversationView component expects a `channel` object
+      const channel = { id: channelId, teamId };
+      const view = ConversationView({ channel, theme: ctx.theme });
+      root.appendChild(view);
+    }).catch(err => {
+      console.error(err);
+      document.getElementById('root').innerHTML = `<p style="color:red">Error: ${err.message}</p>`;
+    });
+  </script>
+</body>
+</html>
